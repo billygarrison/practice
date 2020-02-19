@@ -3,7 +3,6 @@ https://www.youtube.com/watch?
 v=_RLq1jfapcA&list=PLCC34OHNcOtoC6GglhF3ncJ5rLwQrLGnV&index=28
 """
 
-
 from tkinter import *
 from PIL import ImageTk, Image
 import sqlite3
@@ -62,6 +61,24 @@ def add_customer():
 
     # Clear the boxes
     clear_fields()
+
+
+def list_customers():
+    # New window
+    tk_list_customer = Tk()
+    tk_list_customer.title("List All Customers")
+    tk_list_customer.iconbitmap("../images/favicon.ico")
+    tk_list_customer.geometry("800x600")
+
+    # Query the database
+    c.execute("SELECT * FROM customers")
+    recs = c.fetchall()
+    for i, rec in enumerate(recs):
+        col_num = 0
+        for cell_value in rec:
+            lbl_lookup = Label(tk_list_customer, text=cell_value)
+            lbl_lookup.grid(row=i, column=col_num)
+            col_num += 1
 
 root = Tk()
 root.title("CRM Tool")
@@ -142,8 +159,10 @@ btn_add_customer = Button(
     command=add_customer
 )
 btn_clear_fields = Button(root, text="Clear Fields", command=clear_fields)
+btn_list_customers = Button(root, text="List Customers", command=list_customers)
 btn_add_customer.grid(row=15, column=0, columnspan=2, padx=10, pady=10)
 btn_clear_fields.grid(row=16, column=0, columnspan=2, padx=10, pady=10)
+btn_list_customers.grid(row=17, column=0, columnspan=2, padx=10, pady=10)
 
 
 root.mainloop()
