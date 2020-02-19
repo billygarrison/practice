@@ -3,9 +3,28 @@ https://www.youtube.com/watch?
 v=_RLq1jfapcA&list=PLCC34OHNcOtoC6GglhF3ncJ5rLwQrLGnV&index=28
 """
 
+
 from tkinter import *
 from PIL import ImageTk, Image
 import sqlite3
+
+
+def clear_fields():
+    box_first_name.delete(0, END)
+    box_last_name.delete(0, END)
+    box_address1.delete(0, END)
+    box_address2.delete(0, END)
+    box_city.delete(0, END)
+    box_state.delete(0, END)
+    box_zipcode.delete(0, END)
+    box_country.delete(0, END)
+    box_phone.delete(0, END)
+    box_email.delete(0, END)
+    box_username.delete(0, END)
+    box_payment_method.delete(0, END)
+    box_discount_code.delete(0, END)
+    box_price_paid.delete(0, END)
+
 
 root = Tk()
 root.title("CRM Tool")
@@ -51,33 +70,39 @@ lbl_price_paid.grid(row=14, column=0, sticky="w", padx=10)
 # Entrys for main form to enter customer data
 box_first_name = Entry(root)
 box_last_name = Entry(root)
-lbl_address1 = Entry(root)
-lbl_address2 = Entry(root)
-lbl_city = Entry(root)
-lbl_state = Entry(root)
-lbl_zipcode = Entry(root)
-lbl_country = Entry(root)
-lbl_phone = Entry(root)
-lbl_email = Entry(root)
-lbl_username = Entry(root)
-lbl_payment_method = Entry(root)
-lbl_discount_code = Entry(root)
-lbl_price_paid = Entry(root)
+box_address1 = Entry(root)
+box_address2 = Entry(root)
+box_city = Entry(root)
+box_state = Entry(root)
+box_zipcode = Entry(root)
+box_country = Entry(root)
+box_phone = Entry(root)
+box_email = Entry(root)
+box_username = Entry(root)
+box_payment_method = Entry(root)
+box_discount_code = Entry(root)
+box_price_paid = Entry(root)
 
 # Add entrys to screen
 box_first_name.grid(row=1, column=1, pady=5)
 box_last_name.grid(row=2, column=1, pady=5)
-lbl_address1.grid(row=3, column=1, pady=5)
-lbl_address2.grid(row=4, column=1, pady=5)
-lbl_city.grid(row=5, column=1, pady=5)
-lbl_state.grid(row=6, column=1, pady=5)
-lbl_zipcode.grid(row=7, column=1, pady=5)
-lbl_country.grid(row=8, column=1, pady=5)
-lbl_phone.grid(row=9, column=1, pady=5)
-lbl_email.grid(row=10, column=1, pady=5)
-lbl_username.grid(row=11, column=1, pady=5)
-lbl_payment_method.grid(row=12, column=1, pady=5)
-lbl_discount_code.grid(row=13, column=1, pady=5)
-lbl_price_paid.grid(row=14, column=1, pady=5)
+box_address1.grid(row=3, column=1, pady=5)
+box_address2.grid(row=4, column=1, pady=5)
+box_city.grid(row=5, column=1, pady=5)
+box_state.grid(row=6, column=1, pady=5)
+box_zipcode.grid(row=7, column=1, pady=5)
+box_country.grid(row=8, column=1, pady=5)
+box_phone.grid(row=9, column=1, pady=5)
+box_email.grid(row=10, column=1, pady=5)
+box_username.grid(row=11, column=1, pady=5)
+box_payment_method.grid(row=12, column=1, pady=5)
+box_discount_code.grid(row=13, column=1, pady=5)
+box_price_paid.grid(row=14, column=1, pady=5)
+
+# Buttons
+btn_add_customer = Button(root, text="Add Customer To Database")
+btn_clear_fields = Button(root, text="Clear Fields", command=clear_fields)
+btn_add_customer.grid(row=15, column=0, columnspan=2, padx=10, pady=10)
+btn_clear_fields.grid(row=16, column=0, columnspan=2, padx=10, pady=10)
 
 root.mainloop()
