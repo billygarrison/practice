@@ -5,6 +5,7 @@ v=_RLq1jfapcA&list=PLCC34OHNcOtoC6GglhF3ncJ5rLwQrLGnV&index=28
 
 import csv
 from tkinter import *
+from tkinter import filedialog
 from tkinter import ttk  # Used for ComboBox
 import sqlite3
 
@@ -161,7 +162,18 @@ def search_by():
 
 
 def write_to_csv(recs):
-    with open("../data/customers.csv", "w+", newline="") as f:
+    f_path = filedialog.asksaveasfilename(
+        initialdir="C:/Users/garrisow/Desktop/practice/python/tkinter/data",
+        title="Select A File",
+        filetypes=(
+            ("csv files", "*.csv"),
+            ("all files", "*.*")
+        )
+    )
+    if not f_path.endswith("*.csv") and not f_path.endswith("*.CSV"):
+        f_path = f_path + ".csv"
+
+    with open(f_path, "w+", newline="") as f:
         for rec in recs:
             csv_writer = csv.writer(f, dialect="excel")
             csv_writer.writerow(rec)
@@ -183,7 +195,7 @@ lbl_title.grid(row=0, column=0, columnspan=2, pady=10)
 lbl_first_name = Label(root, text="First Name")
 lbl_last_name = Label(root, text="Last Name")
 lbl_address1 = Label(root, text="Address 1")
-lbl_address2 = Label(root, text="Address2")
+lbl_address2 = Label(root, text="Address 2")
 lbl_city = Label(root, text="City")
 lbl_state = Label(root, text="State")
 lbl_zipcode = Label(root, text="Zip Code")
