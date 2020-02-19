@@ -1,4 +1,4 @@
-"""Built using Codemy.com playlist videos 28-35
+"""Built using Codemy.com playlist videos 28-38
 https://www.youtube.com/watch?
 v=_RLq1jfapcA&list=PLCC34OHNcOtoC6GglhF3ncJ5rLwQrLGnV&index=28
 """
@@ -54,7 +54,6 @@ def add_customer():
         "payment_method": box_payment_method.get(),
         "discount_code": box_discount_code.get()
     }
-
     c.execute(sql_command, values)
 
     # Commit changes
@@ -65,7 +64,7 @@ def add_customer():
 
 
 def list_customers():
-    # New window
+    # Create new window to list customers
     tk_list_customer = Tk()
     tk_list_customer.title("List All Customers")
     tk_list_customer.iconbitmap("../images/favicon.ico")
@@ -82,7 +81,11 @@ def list_customers():
             col_num += 1
 
     # Export to CSV button
-    btn_csv = Button(tk_list_customer, text="Save As CSV", command=lambda: write_to_csv(recs))
+    btn_csv = Button(
+        tk_list_customer,
+        text="Save As CSV",
+        command=lambda: write_to_csv(recs)
+    )
     row_num = len(recs) + 1
     btn_csv.grid(row=row_num, column=0, padx=10, pady=10)
 
@@ -92,6 +95,7 @@ def search_customers():
     global tk_search_customers
     global cbo_search
 
+    # Create new window for customer search
     tk_search_customers = Tk()
     tk_search_customers.title("Search Customers")
     tk_search_customers.iconbitmap("../images/favicon.ico")
@@ -100,7 +104,11 @@ def search_customers():
     # Create entry, label, and button for customer name to search
     lbl_search = Label(tk_search_customers, text="Search Customer")
     box_search = Entry(tk_search_customers)
-    btn_search = Button(tk_search_customers, text="Search Customers", command=search_by)
+    btn_search = Button(
+        tk_search_customers,
+        text="Search Customers",
+        command=search_by
+    )
     lbl_search.grid(row=0, column=0, padx=10, pady=10)
     box_search.grid(row=0, column=1, padx=10, pady=10)
     btn_search.grid(row=1, column=0, padx=10, pady=10)
@@ -127,7 +135,10 @@ def search_by():
 
     # SQL statement depends on combobox option
     if cbo_search_selected == "Last Name":
-        sql = "SELECT * FROM customers WHERE last_name LIKE '" + search_val + "'"
+        sql = (
+            "SELECT * FROM customers WHERE last_name LIKE '"
+            + search_val + "'"
+        )
     elif cbo_search_selected == "Email Address":
         sql = "SELECT * FROM customers WHERE email LIKE '" + search_val + "'"
     elif cbo_search_selected == "Customer ID":
@@ -135,6 +146,7 @@ def search_by():
 
     # If the user selected an option from the combo box, look up results
     if cbo_search_selected != "Search by...":
+        # Get records, display message if no records found
         c.execute(sql)
         recs = c.fetchall()
         if not recs:
@@ -142,15 +154,23 @@ def search_by():
             lbl_searched = Label(tk_search_customers, text=txt)
             lbl_searched.grid(row=3, column=0)
         else:
+            # Enumerate through records
             for i, rec in enumerate(recs):
                 col_num = 0
                 id_reference = str(rec[4])
+
+                # Add Edit button
                 btn_edit = Button(
                     tk_search_customers,
                     text="Edit",
-                    command=lambda id_reference=id_reference: edit_record(id_reference, i+7)
+                    command=lambda id_reference=id_reference: edit_record(
+                        id_reference,
+                        i+7
+                    )
                 )
                 btn_edit.grid(row=i + 2, column=col_num)
+
+                # Loop through cells in record, adding them to screen
                 for cell_value in rec:
                     lbl_searched = Label(tk_search_customers, text=cell_value)
                     row_num = i + 2
@@ -158,7 +178,11 @@ def search_by():
                     col_num += 1
 
             # Export to CSV button
-            btn_csv = Button(tk_search_customers, text="Save As CSV", command=lambda: write_to_csv(recs))
+            btn_csv = Button(
+                tk_search_customers,
+                text="Save As CSV",
+                command=lambda: write_to_csv(recs)
+            )
             row_num = len(recs) + 3
             btn_csv.grid(row=row_num, column=0, padx=10, pady=10)
 
@@ -180,8 +204,7 @@ def edit_record(id, start_row):
     global box_edit_price_paid
     global box_edit_id
 
-    print(id)
-
+    # Get record for this user id
     edit_sql = "SELECT * FROM customers WHERE user_id = " + id
     c.execute(edit_sql)
     edit_rec = c.fetchall()[0]
@@ -200,7 +223,6 @@ def edit_record(id, start_row):
     lbl_edit_payment_method = Label(tk_search_customers, text="Payment Method")
     lbl_edit_discount_code = Label(tk_search_customers, text="Discount Code")
     lbl_edit_price_paid = Label(tk_search_customers, text="Price Paid")
-    lbl_edit_id = Label(tk_search_customers, text="User ID")
 
     # Add labels to screen
     lbl_edit_first_name.grid(row=start_row + 1, column=0, sticky="w", padx=10)
@@ -213,10 +235,19 @@ def edit_record(id, start_row):
     lbl_edit_country.grid(row=start_row + 8, column=0, sticky="w", padx=10)
     lbl_edit_phone.grid(row=start_row + 9, column=0, sticky="w", padx=10)
     lbl_edit_email.grid(row=start_row + 10, column=0, sticky="w", padx=10)
-    lbl_edit_payment_method.grid(row=start_row + 12, column=0, sticky="w", padx=10)
-    lbl_edit_discount_code.grid(row=start_row + 13, column=0, sticky="w", padx=10)
+    lbl_edit_payment_method.grid(
+        row=start_row + 12,
+        column=0,
+        sticky="w",
+        padx=10
+    )
+    lbl_edit_discount_code.grid(
+        row=start_row + 13,
+        column=0,
+        sticky="w",
+        padx=10
+    )
     lbl_edit_price_paid.grid(row=start_row + 14, column=0, sticky="w", padx=10)
-    lbl_edit_id.grid(row=start_row + 15, column=0, sticky="w", padx=10)
 
     # Entrys for main form to enter customer data
     box_edit_first_name = Entry(tk_search_customers)
@@ -232,7 +263,6 @@ def edit_record(id, start_row):
     box_edit_payment_method = Entry(tk_search_customers)
     box_edit_discount_code = Entry(tk_search_customers)
     box_edit_price_paid = Entry(tk_search_customers)
-    box_edit_id = Entry(tk_search_customers)
 
     # Add entrys to screen
     box_edit_first_name.grid(row=start_row + 1, column=1, pady=5)
@@ -248,7 +278,6 @@ def edit_record(id, start_row):
     box_edit_payment_method.grid(row=start_row + 12, column=1, pady=5)
     box_edit_discount_code.grid(row=start_row + 13, column=1, pady=5)
     box_edit_price_paid.grid(row=start_row + 14, column=1, pady=5)
-    box_edit_id.grid(row=start_row + 15, column=1)
 
     # Fill entrys with existing values
     box_edit_first_name.insert(0, edit_rec[0])
@@ -264,18 +293,23 @@ def edit_record(id, start_row):
     box_edit_payment_method.insert(0, edit_rec[12])
     box_edit_discount_code.insert(0, edit_rec[13])
     box_edit_price_paid.insert(0, edit_rec[3])
-    box_edit_id.insert(0, edit_rec[4])
 
     # Save changes button
-    btn_edit_save = Button(tk_search_customers, text="Save Changes", command=save_changes)
+    btn_edit_save = Button(
+        tk_search_customers,
+        text="Save Changes",
+        command=save_changes
+    )
     btn_edit_save.grid(row=start_row + 16, column=0, padx=10, pady=10)
 
 
 def save_changes():
     global box_edit_id
 
+    # Get ID to edit
     id_to_edit = box_edit_id.get()
 
+    # SQL command to update record for this user ID
     sql_command = (
         "UPDATE customers SET "
         + "first_name = ? , "
@@ -294,6 +328,7 @@ def save_changes():
         + "WHERE user_id = ?"
     )
 
+    # Get updated values from Entry boxes for sql command
     first_name = box_edit_first_name.get()
     last_name = box_edit_last_name.get()
     address_1 = box_edit_address1.get()
@@ -307,7 +342,6 @@ def save_changes():
     payment_method = box_edit_payment_method.get()
     discount_code = box_edit_discount_code.get()
     price_paid = box_edit_price_paid.get()
-
     vals = (
         first_name,
         last_name,
@@ -325,13 +359,16 @@ def save_changes():
         id_to_edit
     )
 
+    # Update record in database
     c.execute(sql_command, vals)
     conn.commit()
 
+    # Close customer search/edit window
     tk_search_customers.destroy()
 
 
 def write_to_csv(recs):
+    # Get filepath to save to
     f_path = filedialog.asksaveasfilename(
         initialdir="C:/Users/garrisow/Desktop/practice/python/tkinter/data",
         title="Select A File",
@@ -340,20 +377,25 @@ def write_to_csv(recs):
             ("all files", "*.*")
         )
     )
+
+    # Suffix with .csv if required
     if not f_path.endswith("*.csv") and not f_path.endswith("*.CSV"):
         f_path = f_path + ".csv"
 
+    # Write records to CSV
     with open(f_path, "w+", newline="") as f:
         for rec in recs:
             csv_writer = csv.writer(f, dialect="excel")
             csv_writer.writerow(rec)
 
 
+# Main window
 root = Tk()
 root.title("CRM Tool")
 root.iconbitmap("../images/favicon.ico")
 root.geometry("400x800")
 
+# Connect to database
 conn = sqlite3.connect("../data/crm.db")
 c = conn.cursor()
 
@@ -428,8 +470,16 @@ btn_add_customer = Button(
     command=add_customer
 )
 btn_clear_fields = Button(root, text="Clear Fields", command=clear_fields)
-btn_list_customers = Button(root, text="List Customers", command=list_customers)
-btn_search_customers = Button(root, text="Search/Edit Customers", command=search_customers)
+btn_list_customers = Button(
+    root,
+    text="List Customers",
+    command=list_customers
+)
+btn_search_customers = Button(
+    root,
+    text="Search/Edit Customers",
+    command=search_customers
+)
 
 # Add buttons to screen
 btn_add_customer.grid(row=15, column=0, columnspan=2, padx=10, pady=10)
@@ -437,7 +487,8 @@ btn_clear_fields.grid(row=16, column=0, columnspan=2, padx=10, pady=10)
 btn_list_customers.grid(row=17, column=0, columnspan=2, padx=10, pady=10)
 btn_search_customers.grid(row=18, column=0, columnspan=2, padx=10, pady=10)
 
-
+# Main loop
 root.mainloop()
 
+# Close database connection
 conn.close()

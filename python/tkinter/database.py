@@ -209,7 +209,6 @@ def save_update():
     update_window.destroy()
 
 
-
 # Create root with title and favicon
 root = Tk()
 root.title("Database Exercise")
