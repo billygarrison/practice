@@ -3,6 +3,7 @@ https://www.youtube.com/watch?
 v=_RLq1jfapcA&list=PLCC34OHNcOtoC6GglhF3ncJ5rLwQrLGnV&index=28
 """
 
+import csv
 from tkinter import *
 from PIL import ImageTk, Image
 import sqlite3
@@ -68,7 +69,7 @@ def list_customers():
     tk_list_customer = Tk()
     tk_list_customer.title("List All Customers")
     tk_list_customer.iconbitmap("../images/favicon.ico")
-    tk_list_customer.geometry("800x600")
+    tk_list_customer.geometry("900x600")
 
     # Query the database
     c.execute("SELECT * FROM customers")
@@ -79,6 +80,19 @@ def list_customers():
             lbl_lookup = Label(tk_list_customer, text=cell_value)
             lbl_lookup.grid(row=i, column=col_num)
             col_num += 1
+
+    # Export to CSV button
+    btn_csv = Button(tk_list_customer, text="Save As CSV", command=lambda: write_to_csv(recs))
+    row_num = len(recs) + 1
+    btn_csv.grid(row=row_num, column=0, padx=10, pady=10)
+
+
+def write_to_csv(recs):
+    with open("../data/customers.csv", "w+", newline="") as f:
+        for rec in recs:
+            csv_writer = csv.writer(f, dialect="excel")
+            csv_writer.writerow(rec)
+
 
 root = Tk()
 root.title("CRM Tool")
