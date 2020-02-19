@@ -25,10 +25,51 @@ def clear_fields():
     box_price_paid.delete(0, END)
 
 
+def add_customer():
+    sql_command = (
+        "INSERT INTO customers ("
+        + "first_name, last_name, zipcode, price_paid, email, "
+        + "address_1, address_2, city, state, country, phone, "
+        + "payment_method, discount_code"
+        + ") "
+        + " VALUES ("
+        + ":first_name, :last_name, :zipcode, :price_paid, :email, "
+        + ":address_1, :address_2, :city, :state, :country, :phone, "
+        + ":payment_method, :discount_code"
+        + ")"
+    )
+
+    values = {
+        "first_name": box_first_name.get(),
+        "last_name": box_last_name.get(),
+        "zipcode": box_zipcode.get(),
+        "price_paid": box_price_paid.get(),
+        "email": box_email.get(),
+        "address_1": box_address1.get(),
+        "address_2": box_address2.get(),
+        "city": box_city.get(),
+        "state": box_state.get(),
+        "country": box_country.get(),
+        "phone": box_phone.get(),
+        "payment_method": box_payment_method.get(),
+        "discount_code": box_discount_code.get()
+    }
+
+    c.execute(sql_command, values)
+
+    # Commit changes
+    conn.commit()
+
+    # Clear the boxes
+    clear_fields()
+
 root = Tk()
 root.title("CRM Tool")
 root.iconbitmap("../images/favicon.ico")
 root.geometry("400x600")
+
+conn = sqlite3.connect("../data/crm.db")
+c = conn.cursor()
 
 # Title label
 lbl_title = Label(root, text="Customer Database", font=("Helvetica", 16))
@@ -95,9 +136,16 @@ box_discount_code.grid(row=13, column=1, pady=5)
 box_price_paid.grid(row=14, column=1, pady=5)
 
 # Buttons
-btn_add_customer = Button(root, text="Add Customer To Database")
+btn_add_customer = Button(
+    root,
+    text="Add Customer To Database",
+    command=add_customer
+)
 btn_clear_fields = Button(root, text="Clear Fields", command=clear_fields)
 btn_add_customer.grid(row=15, column=0, columnspan=2, padx=10, pady=10)
 btn_clear_fields.grid(row=16, column=0, columnspan=2, padx=10, pady=10)
 
+
 root.mainloop()
+
+conn.close()
