@@ -5,7 +5,7 @@ v=_RLq1jfapcA&list=PLCC34OHNcOtoC6GglhF3ncJ5rLwQrLGnV&index=28
 
 import csv
 from tkinter import *
-#from tkinter import ttk
+from tkinter import ttk  # Used for ComboBox
 import sqlite3
 
 from PIL import ImageTk, Image
@@ -92,6 +92,7 @@ def list_customers():
 def search_customers():
     global box_search
     global tk_search_customers
+    global cbo_search
 
     tk_search_customers = Tk()
     tk_search_customers.title("Search Customers")
@@ -99,28 +100,44 @@ def search_customers():
     tk_search_customers.geometry("900x600")
 
     # Create entry, label, and button for customer name to search
-    lbl_search = Label(tk_search_customers, text="Search Customer By Last Name")
+    lbl_search = Label(tk_search_customers, text="Search Customer")
     box_search = Entry(tk_search_customers)
     btn_search = Button(tk_search_customers, text="Search Customers", command=search_by_last_name)
     lbl_search.grid(row=0, column=0, padx=10, pady=10)
     box_search.grid(row=0, column=1, padx=10, pady=10)
     btn_search.grid(row=1, column=0, padx=10, pady=10)
 
+    # Search by ComboBox
+    cbo_search = ttk.Combobox(tk_search_customers, value=["Search by...", "Last Name", "Email Address", "Customer ID",])
+    cbo_search.current(0)
+    cbo_search.grid(row=0, column=2)
+
 
 def search_by_last_name():
     global box_search
     global tk_search_customers
+    global cbo_search
 
-    search_name = box_search.get()
-    sql = "SELECT * FROM customers WHERE last_name LIKE '" + search_name + "'"
-    c.execute(sql)
-    result = c.fetchall()
+    # Get values from combo box and entry box
+    cbo_search_selected = cbo_search.get()
+    search_val = box_search.get()
 
-    if not result:
-        result = "Record Not Found..."
+    # SQL statement depends on combobox option
+    if cbo_search_selected == "Last Name":
+        sql = "SELECT * FROM customers WHERE last_name LIKE '" + search_val + "'"
+    elif cbo_search_selected == "Email Address":
+        sql = "SELECT * FROM customers WHERE email LIKE '" + search_val + "'"
+    elif cbo_search_selected == "Customer ID":
+        sql = "SELECT * FROM customers WHERE user_id = " + search_val
 
-    lbl_searched = Label(tk_search_customers, text=result)
-    lbl_searched.grid(row=2, column=0, padx=10, pady=10, columnspan=2)
+    # If the user selected an option from the combo box, look up results
+    if cbo_search_selected != "Search by...":
+        c.execute(sql)
+        result = c.fetchall()
+        if not result:
+            result = "Record Not Found..."
+        lbl_searched = Label(tk_search_customers, text=result)
+        lbl_searched.grid(row=2, column=0, padx=10, pady=10, columnspan=2)
 
 
 def write_to_csv(recs):
