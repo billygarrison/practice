@@ -97,23 +97,28 @@ def search_customers():
     tk_search_customers = Tk()
     tk_search_customers.title("Search Customers")
     tk_search_customers.iconbitmap("../images/favicon.ico")
-    tk_search_customers.geometry("900x600")
+    tk_search_customers.geometry("1000x600")
 
     # Create entry, label, and button for customer name to search
     lbl_search = Label(tk_search_customers, text="Search Customer")
     box_search = Entry(tk_search_customers)
-    btn_search = Button(tk_search_customers, text="Search Customers", command=search_by_last_name)
+    btn_search = Button(tk_search_customers, text="Search Customers", command=search_by)
     lbl_search.grid(row=0, column=0, padx=10, pady=10)
     box_search.grid(row=0, column=1, padx=10, pady=10)
     btn_search.grid(row=1, column=0, padx=10, pady=10)
 
     # Search by ComboBox
-    cbo_search = ttk.Combobox(tk_search_customers, value=["Search by...", "Last Name", "Email Address", "Customer ID",])
-    cbo_search.current(0)
+    cbo_search = ttk.Combobox(tk_search_customers, value=[
+        "Search by...",
+        "Last Name",
+        "Email Address",
+        "Customer ID",
+    ])
+    cbo_search.current(1)  # Defaults to index-1 of the value list "Last Name"
     cbo_search.grid(row=0, column=2)
 
 
-def search_by_last_name():
+def search_by():
     global box_search
     global tk_search_customers
     global cbo_search
@@ -133,11 +138,26 @@ def search_by_last_name():
     # If the user selected an option from the combo box, look up results
     if cbo_search_selected != "Search by...":
         c.execute(sql)
-        result = c.fetchall()
-        if not result:
-            result = "Record Not Found..."
-        lbl_searched = Label(tk_search_customers, text=result)
-        lbl_searched.grid(row=2, column=0, padx=10, pady=10, columnspan=2)
+        recs = c.fetchall()
+        if not recs:
+            txt = "Record Not Found..."
+            lbl_searched = Label(tk_search_customers, text=txt)
+            lbl_searched.grid(row=3, column=0)
+        else:
+            for i, rec in enumerate(recs):
+                col_num = 0
+                for cell_value in rec:
+                    lbl_searched = Label(tk_search_customers, text=cell_value)
+                    row_num = i + 2
+                    lbl_searched.grid(row=row_num, column=col_num)
+                    col_num += 1
+
+            # Export to CSV button
+            btn_csv = Button(tk_search_customers, text="Save As CSV", command=lambda: write_to_csv(recs))
+            row_num = len(recs) + 3
+            btn_csv.grid(row=row_num, column=0, padx=10, pady=10)
+        #lbl_searched = Label(tk_search_customers, text=rec)
+        #lbl_searched.grid(row=2, column=0, padx=10, pady=10, columnspan=2)
 
 
 def write_to_csv(recs):
