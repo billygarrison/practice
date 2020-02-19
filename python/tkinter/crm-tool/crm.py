@@ -5,8 +5,10 @@ v=_RLq1jfapcA&list=PLCC34OHNcOtoC6GglhF3ncJ5rLwQrLGnV&index=28
 
 import csv
 from tkinter import *
-from PIL import ImageTk, Image
+#from tkinter import ttk
 import sqlite3
+
+from PIL import ImageTk, Image
 
 
 def clear_fields():
@@ -87,6 +89,40 @@ def list_customers():
     btn_csv.grid(row=row_num, column=0, padx=10, pady=10)
 
 
+def search_customers():
+    global box_search
+    global tk_search_customers
+
+    tk_search_customers = Tk()
+    tk_search_customers.title("Search Customers")
+    tk_search_customers.iconbitmap("../images/favicon.ico")
+    tk_search_customers.geometry("900x600")
+
+    # Create entry, label, and button for customer name to search
+    lbl_search = Label(tk_search_customers, text="Search Customer By Last Name")
+    box_search = Entry(tk_search_customers)
+    btn_search = Button(tk_search_customers, text="Search Customers", command=search_by_last_name)
+    lbl_search.grid(row=0, column=0, padx=10, pady=10)
+    box_search.grid(row=0, column=1, padx=10, pady=10)
+    btn_search.grid(row=1, column=0, padx=10, pady=10)
+
+
+def search_by_last_name():
+    global box_search
+    global tk_search_customers
+
+    search_name = box_search.get()
+    sql = "SELECT * FROM customers WHERE last_name LIKE '" + search_name + "'"
+    c.execute(sql)
+    result = c.fetchall()
+
+    if not result:
+        result = "Record Not Found..."
+
+    lbl_searched = Label(tk_search_customers, text=result)
+    lbl_searched.grid(row=2, column=0, padx=10, pady=10, columnspan=2)
+
+
 def write_to_csv(recs):
     with open("../data/customers.csv", "w+", newline="") as f:
         for rec in recs:
@@ -97,7 +133,7 @@ def write_to_csv(recs):
 root = Tk()
 root.title("CRM Tool")
 root.iconbitmap("../images/favicon.ico")
-root.geometry("400x600")
+root.geometry("400x800")
 
 conn = sqlite3.connect("../data/crm.db")
 c = conn.cursor()
@@ -166,7 +202,7 @@ box_payment_method.grid(row=12, column=1, pady=5)
 box_discount_code.grid(row=13, column=1, pady=5)
 box_price_paid.grid(row=14, column=1, pady=5)
 
-# Buttons
+# Create buttons
 btn_add_customer = Button(
     root,
     text="Add Customer To Database",
@@ -174,9 +210,13 @@ btn_add_customer = Button(
 )
 btn_clear_fields = Button(root, text="Clear Fields", command=clear_fields)
 btn_list_customers = Button(root, text="List Customers", command=list_customers)
+btn_search_customers = Button(root, text="Search Customers", command=search_customers)
+
+# Add buttons to screen
 btn_add_customer.grid(row=15, column=0, columnspan=2, padx=10, pady=10)
 btn_clear_fields.grid(row=16, column=0, columnspan=2, padx=10, pady=10)
 btn_list_customers.grid(row=17, column=0, columnspan=2, padx=10, pady=10)
+btn_search_customers.grid(row=18, column=0, columnspan=2, padx=10, pady=10)
 
 
 root.mainloop()
