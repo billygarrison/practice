@@ -1,7 +1,7 @@
 import pysftp
 
 
-# An *insecure* workaround to avoid needing to register AWS host keys
+# An insecure workaround to avoid needing to register AWS host keys on this pc
 cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 
