@@ -6,3 +6,9 @@ python/tkinter/data/*
 python/tkinter/exe/*
 
 python/unittest/__pycache__/*
+
+python/venv/env/*
+
+python/django/env/*
+python/django/src/pages/__pycache__/*
+python/django/src/mysite/__pycache__/*
