@@ -1,7 +1,7 @@
 import unittest
 
-from my_functions import add_ten, subtract_ten
-from my_functions import concatenate, r_paste
+from myfunctions import add_ten, subtract_ten
+from myfunctions import concatenate, r_paste
 
 
 class TestMath(unittest.TestCase):

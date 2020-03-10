@@ -1,4 +1,4 @@
-from my_functions import add_ten, subtract_ten, multiply_ten, divide_ten
+from myfunctions import add_ten, subtract_ten, multiply_ten, divide_ten
 
 
 print("6 + 10 = " + str(add_ten(6)))

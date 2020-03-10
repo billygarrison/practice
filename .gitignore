@@ -12,3 +12,7 @@ python/venv/env/*
 python/django/env/*
 python/django/src/pages/__pycache__/*
 python/django/src/mysite/__pycache__/*
+
+python/pandas/data/*
+python/pandas/env/*
+python/pandas/figures/*
